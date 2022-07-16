@@ -9,25 +9,18 @@ const client = new Client({
     intents: ['GUILDS', 'GUILD_MESSAGES']
 })
 
-const COMMANDNAME = "ping"
+const COMMANDNAME = "movie"
 const tmdb_img_url = "https://image.tmdb.org/t/p/w300/"
-    // const tmdb_json_url = "https://api.themoviedb.org/3/movie/"
 const TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie?"
 const TMDB_ID_URL = "https://api.themoviedb.org/3/movie/"
 const TMDB_KEY = process.env.TMDB_KEY
-const JACK_ID = process.eventNames.JACK_ID
 client.on('ready', () => {
     log.green('Movie Bot is Online')
 
-    const guildID = process.env.VIP_GUILD
-    const guild = client.guilds.cache.get(guildID)
-    let commands
+    // const guildID = process.env.VIP_GUILD
+    // const guild = client.guilds.cache.get(guildID)
 
-    if (guild) {
-        commands = guild.commands
-    } else {
-        commands = client.application.commands
-    }
+    let commands = client.application.commands
     commands.create({
         name: COMMANDNAME,
         description: 'Googles movie for you',
@@ -60,10 +53,6 @@ client.on('interactionCreate', async(interaction) => {
         console.log(`Title Entry: ${title}\nYear Entry: ${year}`)
         let data
         data = await gatherData(title, year)
-        client.users.cache.get(JACK_ID).then((user) => {
-            console.log(user)
-            user.send(`Bot broke with error:`);
-        });
 
         if (data) {
             const embed = new MessageEmbed()
@@ -193,9 +182,6 @@ let build_post = (movie_json, director) => {
 
 process.on('uncaughtException', (err) => {
     log.redBright('Process exit with error: ', err);
-    // client.users.fetch(JACK_ID, false).then((user) => {
-    //     user.send(`Bot broke with error: ${err}`);
-    // });
 });
 
 const encodeGetParams = p =>
